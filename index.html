@@ -1,265 +1,146 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Zayed University Parking Reservation</title>
-
   <style>
-
     body {
-
       font-family: Arial, sans-serif;
-
       display: flex;
-
       flex-direction: column;
-
       align-items: center;
-
       justify-content: center;
-
-      background-color: #f0f0f0;
-
-    }
-
-    .iphone-simulation {
-
-      width: 300px;
-
-      height: 600px;
-
-      border: 15px solid #333;
-
-      border-radius: 50px;
-
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-
-      background-color: #fff;
-
-      overflow: hidden;
-
-      display: flex;
-
-      flex-direction: column;
-
-      align-items: center;
-
-    }
-
-    .header {
-
-      background-color: #0073e6;
-
-      color: white;
-
-      width: 100%;
-
-      padding: 15px;
-
-      text-align: center;
-
-    }
-
-    .parking-lot {
-
-      display: grid;
-
-      grid-template-columns: repeat(5, 1fr);
-
-      gap: 10px;
-
+      background-color: #f8f9fa;
+      margin: 0;
       padding: 20px;
-
-      width: 90%;
-
     }
-
-    .space {
-
-      width: 50px;
-
-      height: 50px;
-
-      border-radius: 8px;
-
+    .iphone-simulation {
+      width: 320px;
+      height: 600px;
+      border: 10px solid #333;
+      border-radius: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      background-color: #fff;
+      overflow: hidden;
       display: flex;
-
+      flex-direction: column;
       align-items: center;
-
-      justify-content: center;
-
+      padding: 10px;
+    }
+    .header {
+      background-color: #0073e6;
+      color: white;
+      font-size: 18px;
       font-weight: bold;
-
+      padding: 15px;
+      width: 100%;
+      text-align: center;
+      border-radius: 10px;
+    }
+    .parking-lot {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      padding: 20px;
+      width: 100%;
+    }
+    .space {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
       cursor: pointer;
-
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
     }
-
     .taken {
-
-      background-color: red;
-
+      background-color: #dc3545;
+      color: white;
     }
-
     .free {
-
-      background-color: green;
-
+      background-color: #28a745;
+      color: white;
     }
-
+    .space:hover {
+      background-color: #ffc107;
+      color: black;
+    }
     .confetti {
-
       display: none;
-
       position: absolute;
-
       top: 50%;
-
       left: 50%;
-
       transform: translate(-50%, -50%);
-
       font-size: 2em;
-
     }
-
   </style>
-
 </head>
-
 <body>
 
-
-
 <div class="iphone-simulation">
-
   <div class="header">Gate 5 Parking Reservation</div>
-
   <div class="parking-lot" id="parkingLot">
-
     <!-- Spaces generated here by JavaScript -->
-
   </div>
-
   <div class="confetti" id="confetti">🎉🎉🎉</div>
-
 </div>
 
-
-
 <script>
-
   const parkingSpaces = [
-
     { id: 1, status: 'free' },
-
     { id: 2, status: 'taken' },
-
     { id: 3, status: 'free' },
-
     { id: 4, status: 'free' },
-
     { id: 5, status: 'taken' },
-
     { id: 6, status: 'taken' },
-
     { id: 7, status: 'free' },
-
     { id: 8, status: 'taken' },
-
     { id: 9, status: 'free' },
-
     { id: 10, status: 'free' },
-
     { id: 11, status: 'taken' },
-
     { id: 12, status: 'free' },
-
     { id: 13, status: 'free' },
-
     { id: 14, status: 'taken' },
-
     { id: 15, status: 'free' },
-
   ];
 
-
-
   function renderParkingLot() {
-
     const lot = document.getElementById('parkingLot');
-
     lot.innerHTML = '';
-
     parkingSpaces.forEach(space => {
-
       const spaceDiv = document.createElement('div');
-
       spaceDiv.className = `space ${space.status}`;
-
       spaceDiv.innerText = space.id;
-
       spaceDiv.onclick = () => reserveSpace(space.id);
-
       lot.appendChild(spaceDiv);
-
     });
-
   }
-
-
 
   function reserveSpace(id) {
-
     const space = parkingSpaces.find(s => s.id === id);
-
     if (space.status === 'free') {
-
       space.status = 'taken';
-
       renderParkingLot();
-
       showConfetti();
-
       setTimeout(() => hideConfetti(), 2000);
-
     } else {
-
       alert('This space is already taken.');
-
     }
-
   }
-
-
 
   function showConfetti() {
-
     document.getElementById('confetti').style.display = 'block';
-
   }
-
-
 
   function hideConfetti() {
-
     document.getElementById('confetti').style.display = 'none';
-
   }
 
-
-
   renderParkingLot();
-
 </script>
 
-
-
 </body>
-
 </html>
