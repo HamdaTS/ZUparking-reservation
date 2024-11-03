@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zayed University Parking Reservation</title>
+  <title>ParkZU - Zayed University Parking Reservation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,120 +11,138 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background-color: #e9ecef;
-      margin: 0;
-      padding: 20px;
-      overflow: hidden;
+      background-color: #f0f0f0;
     }
-    .iphone-simulation {
-      width: 320px;
-      height: 600px;
-      border: 15px solid #333;
-      border-radius: 40px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      background-color: #fff;
-      overflow: hidden;
+
+    .homepage, .parking-lot-page, .duration-page, .navigation-page {
+      display: none;
+    }
+
+    .visible {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px;
-      position: relative;
     }
+
     .header {
+      font-size: 1.5em;
+      margin: 20px;
+      color: #0073e6;
+    }
+
+    .subheader {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .button {
+      padding: 10px 20px;
       background-color: #0073e6;
       color: white;
-      font-size: 18px;
-      font-weight: bold;
-      padding: 15px;
-      width: 100%;
-      text-align: center;
-      border-radius: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
     }
+
     .parking-lot {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 5px;
+      gap: 10px;
       padding: 20px;
-      width: 100%;
+      width: 90%;
     }
+
     .space {
       width: 50px;
       height: 50px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
       cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-      background-color: #f8f9fa;
     }
+
     .taken {
-      background-color: #dc3545;
-      color: white;
+      background-color: red;
     }
+
     .free {
-      background-color: #28a745;
-      color: white;
+      background-color: green;
     }
+
     .confetti {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      display: none;
-      pointer-events: none;
       overflow: hidden;
-      z-index: 1;
+      display: none;
+      background: rgba(255, 255, 255, 0.5);
     }
+
     .confetti-piece {
+      position: absolute;
       width: 10px;
       height: 10px;
-      position: absolute;
-      animation: fall 1.5s linear infinite;
-      opacity: 0.8;
+      background-color: rgba(255, 0, 0, 0.7);
+      animation: fall 1s linear infinite;
     }
-    .direction-screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      color: #0073e6;
-    }
-    .arrow {
-      font-size: 24px;
-      margin: 10px;
-      animation: blink 0.5s alternate infinite;
-    }
+
     @keyframes fall {
-      to {
-        transform: translateY(600px) rotate(360deg);
-      }
-    }
-    @keyframes blink {
-      0% { opacity: 1; }
-      100% { opacity: 0; }
+      0% { transform: translateY(-50px); opacity: 1; }
+      100% { transform: translateY(500px); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-<div class="iphone-simulation" id="parkingApp">
-  <div class="header">Gate 5 Parking Reservation</div>
+<!-- Homepage -->
+<div class="homepage visible" id="homepage">
+  <div class="header">Welcome to ParkZU</div>
+  <div class="subheader">Book your parking here</div>
+  <label for="gateSelect">Choose Gate:</label>
+  <select id="gateSelect">
+    <option value="5">Gate 5</option>
+    <!-- Additional gates can be added here -->
+  </select>
+  <button class="button" onclick="goToParkingLot()">Next</button>
+</div>
+
+<!-- Parking Lot Selection Page -->
+<div class="parking-lot-page" id="parkingLotPage">
+  <div class="header">Choose Your Parking Spot</div>
   <div class="parking-lot" id="parkingLot">
     <!-- Spaces generated here by JavaScript -->
   </div>
-  <div class="confetti" id="confetti"></div>
 </div>
 
-<div class="iphone-simulation direction-screen" id="directionScreen">
-  <div class="header">Navigate to Your Spot</div>
-  <div class="arrow">⬆️</div>
-  <div class="arrow">➡️</div>
-  <div class="arrow">⬆️</div>
+<!-- Duration Selection Page -->
+<div class="duration-page" id="durationPage">
+  <div class="header">How long would you like to book?</div>
+  <select id="durationSelect">
+    <option value="1">1 hour</option>
+    <option value="2">2 hours</option>
+    <option value="3">3 hours</option>
+    <option value="4">4 hours</option>
+    <option value="5">5 hours</option>
+    <option value="6">6 hours</option>
+    <option value="7">7 hours</option>
+  </select>
+  <button class="button" onclick="confirmBooking()">Confirm Booking</button>
 </div>
+
+<!-- Navigation Page -->
+<div class="navigation-page" id="navigationPage">
+  <div class="header">Navigation to Your Spot</div>
+  <div class="subheader">Follow the arrows to reach your parking spot</div>
+  <!-- Placeholder for navigation arrows -->
+  <div id="arrows" style="font-size: 2em;">➡️ ➡️ ➡️</div>
+</div>
+
+<!-- Confetti Animation -->
+<div class="confetti" id="confetti"></div>
 
 <script>
   const parkingSpaces = [
@@ -138,12 +156,13 @@
     { id: 8, status: 'taken' },
     { id: 9, status: 'free' },
     { id: 10, status: 'free' },
-    { id: 11, status: 'taken' },
-    { id: 12, status: 'free' },
-    { id: 13, status: 'free' },
-    { id: 14, status: 'taken' },
-    { id: 15, status: 'free' },
   ];
+
+  function goToParkingLot() {
+    document.getElementById('homepage').classList.remove('visible');
+    document.getElementById('parkingLotPage').classList.add('visible');
+    renderParkingLot();
+  }
 
   function renderParkingLot() {
     const lot = document.getElementById('parkingLot');
@@ -152,45 +171,39 @@
       const spaceDiv = document.createElement('div');
       spaceDiv.className = `space ${space.status}`;
       spaceDiv.innerText = space.id;
-      spaceDiv.onclick = () => reserveSpace(space.id);
+      spaceDiv.onclick = () => selectSpace(space.id);
       lot.appendChild(spaceDiv);
     });
   }
 
-  function createConfetti() {
-    const confettiContainer = document.getElementById('confetti');
-    confettiContainer.innerHTML = '';
-    for (let i = 0; i < 50; i++) {
-      const confettiPiece = document.createElement('div');
-      confettiPiece.className = 'confetti-piece';
-      confettiPiece.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-      confettiPiece.style.left = `${Math.random() * 100}%`;
-      confettiPiece.style.animationDelay = `${Math.random() * 2}s`;
-      confettiContainer.appendChild(confettiPiece);
-    }
-    confettiContainer.style.display = 'block';
-    setTimeout(() => confettiContainer.style.display = 'none', 2000);
-  }
-
-  function reserveSpace(id) {
+  function selectSpace(id) {
     const space = parkingSpaces.find(s => s.id === id);
     if (space.status === 'free') {
       space.status = 'taken';
-      renderParkingLot();
-      createConfetti();
-      setTimeout(showDirections, 2500);
+      document.getElementById('parkingLotPage').classList.remove('visible');
+      document.getElementById('durationPage').classList.add('visible');
     } else {
       alert('This space is already taken.');
     }
   }
 
-  function showDirections() {
-    document.getElementById('parkingApp').style.display = 'none';
-    document.getElementById('directionScreen').style.display = 'flex';
+  function confirmBooking() {
+    document.getElementById('durationPage').classList.remove('visible');
+    document.getElementById('navigationPage').classList.add('visible');
+    showConfetti();
+  }
+
+  function showConfetti() {
+    const confetti = document.getElementById('confetti');
+    confetti.style.display = 'block';
+    setTimeout(() => confetti.style.display = 'none', 2000);
   }
 
   renderParkingLot();
 </script>
+</body>
+</html>
+
 
 </body>
 </html>
